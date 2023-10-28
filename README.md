@@ -39,11 +39,11 @@ chroma_client = chromadb.PersistentClient(path='./chroma_storage')
 collection = chroma_client.create_collection(name="app", embedding_function=chroma_embedder)
 
 insert_df_collection(
-    collection,
-    embeded_sentences, 
-    description, 
-    'app_desc', 
-    'id', 
+    collection = collection,
+    embeddings = embeded_sentences, 
+    df = dataframe, 
+    doc_col = 'app_desc', 
+    id_col = 'id', 
     meta_cols = ['track_name']
 )
 ```
