@@ -82,3 +82,32 @@ Embedding Batch: 1......Done.
   {'track_name': 'Musicloud - MP3 and FLAC Music Player for Cloud Platforms.'},
   {'track_name': 'Epic Orchestra'}]]
 ```
+
+
+### 6. Connect to existing collection & making queries.
+```python
+import chromadb
+import pandas as pd
+from nlp_toolkit import (
+    set_proxy,
+    SentenceEmbedder,
+    make_chroma
+)
+
+set_proxy()
+
+embedder = SentenceEmbedder(mps = True, batch_size=256)
+
+chroma_embedder = make_chroma(embedder)
+
+chroma_client = chromadb.PersistentClient(path='./chroma_storage')
+
+collection = chroma_client.get_collection(name="app", embedding_function=chroma_embedder)
+
+results = collection.query(
+    query_texts=["monitor your sleep, keep healthy life style"],
+    n_results=20,
+)
+
+results['metadatas']
+```
