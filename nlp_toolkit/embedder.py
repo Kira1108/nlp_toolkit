@@ -10,6 +10,7 @@ class SentenceEmbedder:
 
     model_ckpt:str = "sentence-transformers/all-MiniLM-L6-v2"
     mps:bool = False
+    batch_size:int = 512
 
     def __post_init__(self):
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_ckpt)
@@ -45,8 +46,8 @@ class SentenceEmbedder:
         encoder_input, model_output = self._embed(sentences)
         return self.mean_pooling(encoder_input, model_output).cpu().numpy()
 
-    def __call__(self, texts, batch_size = 512):
-
+    def __call__(self, texts):
+        batch_size = self.batch_size
         n_batchs = len(texts) // batch_size + int(len(texts) % batch_size > 0)
 
         subset_embeddings = []
@@ -59,18 +60,21 @@ class SentenceEmbedder:
             print("Done.")
         return np.concatenate(subset_embeddings)
     
-    def chroma_function(self):
-        
-        align_func = lambda texts: self(texts, batch_size = 256)
-        
-        from chromadb import Documents, EmbeddingFunction, Embeddings
+    
+def make_chroma(embedder):
+    from chromadb import Documents, EmbeddingFunction, Embeddings
 
-        class ChromaEmbedder(EmbeddingFunction):
-            def __call__(self, texts: Documents) -> Embeddings:
-                embeddings = align_func(texts)
-                return embeddings
+    class ChromaEmbeddingFunction(EmbeddingFunction):
+        def __call__(self, texts: Documents) -> Embeddings:
+            return embedder(texts)
         
-        return ChromaEmbedder()
+    return ChromaEmbeddingFunction()
+        
+    
+    
+    
+    
+
 
     
 
