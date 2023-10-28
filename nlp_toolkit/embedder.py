@@ -57,3 +57,4 @@ class SentenceEmbedder:
             subset_embeddings.append(subset_embedding)
             print("Done.")
         return np.concatenate(subset_embeddings)
+    
