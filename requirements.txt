@@ -1,0 +1,12 @@
+transformers
+datasets
+accelerate
+evaluate
+googletrans=="3.1.0a0"
+tiktoken
+langchain
+chromadb
+torch
+tensorflow
+sentencepiece
+
