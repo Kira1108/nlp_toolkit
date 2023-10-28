@@ -3,6 +3,7 @@ from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as F
 from dataclasses import dataclass
 import numpy as np
+from functools import partial
 
 @dataclass
 class SentenceEmbedder:
@@ -44,17 +45,33 @@ class SentenceEmbedder:
         encoder_input, model_output = self._embed(sentences)
         return self.mean_pooling(encoder_input, model_output).cpu().numpy()
 
-    def __call__(self, sentences, batch_size = 512):
+    def __call__(self, texts, batch_size = 512):
 
-        n_batchs = len(sentences) // batch_size + int(len(sentences) % batch_size > 0)
+        n_batchs = len(texts) // batch_size + int(len(texts) % batch_size > 0)
 
         subset_embeddings = []
 
         for i in range(n_batchs):
             print("Embedding Batch: {}".format(i + 1), end = "......")
-            subset = sentences[i * batch_size: (i+1) * batch_size]
+            subset = texts[i * batch_size: (i+1) * batch_size]
             subset_embedding = self.embed_sentences(subset)
             subset_embeddings.append(subset_embedding)
             print("Done.")
         return np.concatenate(subset_embeddings)
     
+    def chroma_function(self):
+        
+        align_func = lambda texts: self(texts, batch_size = 256)
+        
+        from chromadb import Documents, EmbeddingFunction, Embeddings
+
+        class ChromaEmbedder(EmbeddingFunction):
+            def __call__(self, texts: Documents) -> Embeddings:
+                embeddings = align_func(texts)
+                return embeddings
+        
+        return ChromaEmbedder()
+
+    
+
+
