@@ -4,6 +4,12 @@ import torch.nn.functional as F
 from dataclasses import dataclass
 import numpy as np
 from functools import partial
+from typing import Protocol
+import numpy as np
+
+class BaseEmbedder(Protocol):
+    def __call__(self, texts) -> np.ndarray:
+        ...
 
 @dataclass
 class SentenceEmbedder:
