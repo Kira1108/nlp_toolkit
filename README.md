@@ -111,3 +111,29 @@ results = collection.query(
 
 results['metadatas']
 ```
+
+```bash
+Using http proxy: http://127.0.0.1:8001
+Turn on VPN with corresponding proxy.
+Embedding Batch: 1......Done.
+[[{'track_name': 'iSleeping by iSommeil SARL'},
+  {'track_name': 'Good Morning Alarm Clock - Sleep Cycle Tracker'},
+  {'track_name': 'Sleep Cycle alarm clock'},
+  {'track_name': 'Sleep Pulse 2 Motion - The Sleep Tracker for Watch'},
+  {'track_name': 'SenseSleep - Train Your Brain To Sleep Better'},
+  {'track_name': 'SmartFit - Wristband'},
+  {'track_name': 'Sleep Meister - Sleep Cycle Alarm'},
+  {'track_name': 'AutoSleep. Auto Sleep Tracker for Watch'},
+  {'track_name': 'Sleep Meister - Sleep Cycle Alarm Lite'},
+  {'track_name': 'Smart Alarm Clock : sleep cycle & snoring recorder'},
+  {'track_name': 'Life Cycle - Track Your Time Automatically'},
+  {'track_name': 'Sleep Talk Recorder'},
+  {'track_name': 'Morning Routine : Daily Habit Tracker'},
+  {'track_name': 'airweave sleep analysis'},
+  {'track_name': 'Snail Sleep-Dream Talk Recording'},
+  {'track_name': 'Productive habits & daily goals tracker'},
+  {'track_name': 'iSleep Easy - Meditations for Restful Sleep'},
+  {'track_name': 'Fitness Sync for Fitbit to Apple Health'},
+  {'track_name': 'SnoreLab : Record Your Snoring'},
+  {'track_name': 'Kiwake Alarm Clock - Take back your mornings'}]]
+```
