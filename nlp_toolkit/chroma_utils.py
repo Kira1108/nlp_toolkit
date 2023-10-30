@@ -1,12 +1,14 @@
 import numpy as np
 import datetime
+import pandas as pd
+from typing import List
 
 def insert_df_collection(collection, 
-                         embeddings,
-                         df, 
+                         embeddings:List[List[float]],
+                         df:pd.DataFrame, 
                          doc_col:str, 
                          id_col:str, 
-                         meta_cols:list = None):
+                         meta_cols:list = None) -> None:
     
     df['create_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     df['update_time'] = None
@@ -39,12 +41,12 @@ def insert_df_collection(collection,
     
 def insert_df_collection_batch(
     collection, 
-    embeddings, 
-    df, 
+    embeddings:List[List[float]], 
+    df:pd.DataFrame, 
     doc_col:str, 
     id_col:str = None, 
     meta_cols:list = None, 
-    batch_size = 10000):
+    batch_size = 10000) -> None:
     
     n_batchs = int(np.ceil(len(df)/batch_size))
     
