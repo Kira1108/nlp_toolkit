@@ -1,17 +1,18 @@
 import numpy as np
+import datetime
 
 def insert_df_collection(collection, 
                          embeddings,
-                         df, doc_col:str, 
-                         id_col:str = None, 
+                         df, 
+                         doc_col:str, 
+                         id_col:str, 
                          meta_cols:list = None):
+    
+    df['create_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    df['update_time'] = None
 
-    if id_col is not None:
-        ids = df[id_col].astype(str).tolist()
-    else:
-        ids = None
-        id_col = ""
-        
+    ids = df[id_col].astype(str).tolist()
+
     if isinstance(embeddings, np.ndarray):
         embeddings = embeddings.tolist()
 
@@ -36,7 +37,14 @@ def insert_df_collection(collection,
     print("Successful added to collection")
     
     
-def insert_df_collection_batch(collection, embeddings, df, doc_col:str, id_col:str = None, meta_cols:list = None, batch_size = 10000):
+def insert_df_collection_batch(
+    collection, 
+    embeddings, 
+    df, 
+    doc_col:str, 
+    id_col:str = None, 
+    meta_cols:list = None, 
+    batch_size = 10000):
     
     n_batchs = int(np.ceil(len(df)/batch_size))
     

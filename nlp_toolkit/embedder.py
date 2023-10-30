@@ -3,7 +3,6 @@ from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as F
 from dataclasses import dataclass
 import numpy as np
-from functools import partial
 from typing import Protocol
 import numpy as np
 
