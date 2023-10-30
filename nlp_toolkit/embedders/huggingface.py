@@ -3,12 +3,6 @@ from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as F
 from dataclasses import dataclass
 import numpy as np
-from typing import Protocol
-import numpy as np
-
-class BaseEmbedder(Protocol):
-    def __call__(self, texts) -> np.ndarray:
-        ...
 
 @dataclass
 class SentenceEmbedder:
@@ -66,14 +60,7 @@ class SentenceEmbedder:
         return np.concatenate(subset_embeddings)
   
 
-def make_chroma(embedder):
-    from chromadb import Documents, EmbeddingFunction, Embeddings
 
-    class ChromaEmbeddingFunction(EmbeddingFunction):
-        def __call__(self, texts: Documents) -> Embeddings:
-            return embedder(texts)
-        
-    return ChromaEmbeddingFunction()
         
     
     
