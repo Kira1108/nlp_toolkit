@@ -34,3 +34,20 @@ def insert_df_collection(collection,
     collection.add(**params)
     
     print("Successful added to collection")
+    
+    
+def insert_df_collection_batch(collection, embeddings, df, doc_col:str, id_col:str = None, meta_cols:list = None, batch_size = 10000):
+    
+    n_batchs = int(np.ceil(len(df)/batch_size))
+    
+    for i in range(n_batchs):
+        print(f"Inserting batch {i+1}/{n_batchs}")
+        insert_df_collection(
+            collection, 
+            embeddings[i*batch_size:(i+1)*batch_size], 
+            df.iloc[i*batch_size:(i+1)*batch_size], 
+            doc_col, 
+            id_col, 
+            meta_cols)
+        
+    print("Successful added all data to collection")
