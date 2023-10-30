@@ -61,3 +61,19 @@ def insert_df_collection_batch(
             meta_cols)
         
     print("Successful added all data to collection")
+    
+    
+def update_metafield(collection, ids = None, **kwargs):
+    
+    if ids is None:
+        ids = collection.get(include=[])['ids']
+        
+    collection.update(
+        ids = ids,
+        metadatas = [kwargs] * len(ids)
+    )
+    
+    print("Update metdata successfully.")
+    
+
+
