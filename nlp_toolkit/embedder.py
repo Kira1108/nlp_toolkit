@@ -65,8 +65,8 @@ class SentenceEmbedder:
             subset_embeddings.append(subset_embedding)
             print("Done.")
         return np.concatenate(subset_embeddings)
-    
-    
+  
+
 def make_chroma(embedder):
     from chromadb import Documents, EmbeddingFunction, Embeddings
 
