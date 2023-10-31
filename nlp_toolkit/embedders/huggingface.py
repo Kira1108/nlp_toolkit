@@ -3,6 +3,7 @@ from transformers import AutoTokenizer, AutoModel
 import torch.nn.functional as F
 from dataclasses import dataclass
 import numpy as np
+from tqdm import tqdm
 
 @dataclass
 class SentenceEmbedder:
@@ -51,12 +52,10 @@ class SentenceEmbedder:
 
         subset_embeddings = []
 
-        for i in range(n_batchs):
-            print("Embedding Batch: {}".format(i + 1), end = "......")
+        for i in tqdm(range(n_batchs), total = n_batchs, desc = "Embedding Batches"):
             subset = texts[i * batch_size: (i+1) * batch_size]
             subset_embedding = self.embed_sentences(subset)
             subset_embeddings.append(subset_embedding)
-            print("Done.")
         return np.concatenate(subset_embeddings)
   
 
