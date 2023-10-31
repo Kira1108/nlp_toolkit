@@ -64,16 +64,23 @@ def insert_df_collection_batch(
     
     
 def update_metafield(collection, ids = None, **kwargs):
+    """The only thing you can update is the metafield."""
     
+    # if no ids is provided, update all ids.
     if ids is None:
         ids = collection.get(include=[])['ids']
-        
+      
+    # add an updatetime to update meta dictionary  
+    kwargs.update(update_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    
     collection.update(
         ids = ids,
         metadatas = [kwargs] * len(ids)
     )
     
     print("Update metdata successfully.")
+    
+
     
 
 
