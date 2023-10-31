@@ -11,7 +11,7 @@ def insert_df_collection(collection,
                          meta_cols:list = None) -> None:
     
     df['create_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    df['update_time'] = None
+    df['update_time'] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     ids = df[id_col].astype(str).tolist()
 
