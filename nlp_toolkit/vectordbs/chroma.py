@@ -80,6 +80,31 @@ def update_metafield(collection, ids = None, **kwargs):
     
     print("Update metdata successfully.")
     
+    
+def mean_seed_query(collection, ids, n:int = 10):
+
+   embeddings = collection.get(ids = ids, include = ['embeddings'])['embeddings']
+
+   mean_vector = np.array(embeddings).mean(axis = 0)
+
+   results = collection.query(
+      query_embeddings = [mean_vector.tolist()], 
+      n_results = n)
+   
+   return results
+
+def concat_text_query(collection, ids, n:int = 10):
+    
+   documents = collection.get(ids = ids, include = ['documents'])['documents']
+
+   query_text = " ".join(documents)
+
+   results = collection.query(
+         query_texts = [query_text], 
+         n_results = n)
+   
+   return results
+    
 
     
 
