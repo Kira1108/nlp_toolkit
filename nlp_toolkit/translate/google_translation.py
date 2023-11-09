@@ -43,6 +43,9 @@ class GoogleTrans:
         
         return result.text
     
+    def __call__(self, text:Union[str, list]):
+        return self.translate(text)
+    
     @property
     def languages(self):
         from googletrans import LANGUAGES
