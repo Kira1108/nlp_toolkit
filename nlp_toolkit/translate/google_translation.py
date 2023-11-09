@@ -5,7 +5,7 @@ class GoogleTransInstallationError(Exception):
 
 class GoogleTrans:
     
-    def __init__(self, src:str = None, dest:str = None, *args, **kwargs):
+    def __init__(self, src:str = None, dest:str = "en", *args, **kwargs):
         """
         Translate from src language to desc language
         src: source language, if not specified, googletrans will detect the language
