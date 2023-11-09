@@ -1,0 +1,1 @@
+from .google_translation import GoogleTrans
