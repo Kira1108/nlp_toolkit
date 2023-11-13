@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .DS_Store
+bm25_model_dump
+*.ipynb
