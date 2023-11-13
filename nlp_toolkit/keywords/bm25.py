@@ -7,6 +7,18 @@ import os
 from pathlib import Path
 import json
 import pickle
+import nltk
+from nltk.corpus import stopwords
+nltk.download('stopwords')
+
+def remove_stop_words(input_string:str):
+    """
+    This function removes stop words from the given text.
+    """
+    stop_words = set(stopwords.words('english'))
+    words = input_string.split()
+    filtered_words = [word for word in words if word.casefold() not in stop_words]
+    return ' '.join(filtered_words)
 
 def remove_punctuation_and_numbers(input_string:str):
     translator = str.maketrans('', '', string.punctuation + string.digits)
@@ -24,6 +36,7 @@ class Tokenizer:
             raise ValueError("doc must be a string")
         doc = remove_punctuation_and_numbers(doc)
         doc = make_lowercase(doc)
+        doc = remove_stop_words(doc)
         return [word.strip() for word in doc.lower().split(" ")]
         
     def tokenize_batch(self, documents:List[str]) -> List[List[str]]:
