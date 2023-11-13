@@ -9,4 +9,5 @@ chromadb
 torch
 tensorflow
 sentencepiece
+nltk
 
