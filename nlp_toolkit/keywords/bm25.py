@@ -22,6 +22,8 @@ class Tokenizer:
         """Tokenize a single document of string type"""
         if not isinstance(doc, str):
             raise ValueError("doc must be a string")
+        doc = remove_punctuation_and_numbers(doc)
+        doc = make_lowercase(doc)
         return [word.strip() for word in doc.lower().split(" ")]
         
     def tokenize_batch(self, documents:List[str]) -> List[List[str]]:
