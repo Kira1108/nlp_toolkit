@@ -2,6 +2,7 @@
 
 
 ### 0. Work with OpenAi
+*注意一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*
 ```python
 from nlp_toolkit.functions import OpenAITool, FuncArg
 from nlp_toolkit import get_completion
