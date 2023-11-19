@@ -9,7 +9,7 @@ from openai import OpenAI
 import json
 
 import os
-os.environ["OPENAI_API_KEY"] = "sk-"
+os.environ["OPENAI_API_KEY"] = "your openai key"
 
 client = OpenAI()
 
