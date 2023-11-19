@@ -3,8 +3,8 @@
 
 ### 0. Work with OpenAi
 *1. 一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*    
-*2. 函数的参数必须是json schema，比如dict, list, float, int, str, bool这些的其中一种，外部不可能传一个python对象过来的。*    
-*3. 输入的格式必须是string，不给string，chatgpt就不方便做下一步的处理，把list，对象啥的，都jsondump成string再返回。*    
+*2. 函数参数必须是json schema，比如dict, list, float, int, str, bool这些的其中一种*    
+*3. 输入的格式必须是string，不给string，chatgpt就不方便做下一步的处理，一切都jsondump成string再返回。*      
 ```python
 from nlp_toolkit.functions import OpenAITool, FuncArg
 from nlp_toolkit import get_completion
