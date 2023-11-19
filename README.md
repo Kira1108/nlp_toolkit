@@ -1,5 +1,44 @@
 # Vector Database Workflow
 
+
+### 0. Work with OpenAi
+```python
+from nlp_toolkit.functions import OpenAITool, FuncArg
+from nlp_toolkit import get_completion
+from openai import OpenAI
+import json
+
+import os
+os.environ["OPENAI_API_KEY"] = "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"
+
+client = OpenAI()
+
+# 实现一个简单的python函数
+def get_current_weather(location:str, unit:str="fahrenheit"):
+    """Get the current weather in a given location"""
+    if "tokyo" in location.lower():
+        return json.dumps({"location": "Tokyo", "temperature": "10", "unit": "celsius"})
+    elif "san francisco" in location.lower():
+        return json.dumps({"location": "San Francisco", "temperature": "72", "unit": "fahrenheit"})
+    elif "paris" in location.lower():
+        return json.dumps({"location": "Paris", "temperature": "22", "unit": "celsius"})
+    else:
+        return json.dumps({"location": location, "temperature": "unknown"})
+
+# 把这个python函数变成OpenAI的插件
+weather_tool = OpenAITool(
+    func = get_current_weather, 
+    location = FuncArg(description = "The city and state, e.g. San Francisco, CA"),
+    unit = FuncArg(description = "The unit of measurement, e.g. fahrenheit", enum = ["celsius", "fahrenheit"])
+)
+
+# 带着插件的聊天，可以写很多插件，一起聊
+get_completion(
+    client, 
+    "What's the weather like in San Francisco and Tokyo?",
+    tools_list = [weather_tool], verbose = True).choices[0].message.content
+```
+
 ### 1. Set proxy if using in ....
 ```python
 import pandas as pd
