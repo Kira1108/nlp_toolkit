@@ -1,4 +1,3 @@
-import openai
 import json
 
 def get_completion(client, prompt:str, tools_list:list, verbose:bool = False):
