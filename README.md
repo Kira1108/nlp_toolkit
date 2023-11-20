@@ -1,4 +1,6 @@
-# Vector Database Workflow
+# Some NLP tools for daily use
+
+*NLP死路一条，不要当NLP工程师*
 
 
 ### 0. Work with OpenAi
