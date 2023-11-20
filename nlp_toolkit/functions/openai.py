@@ -24,12 +24,25 @@ def get_function_arg_type(func) -> dict:
         float: "number",
         str:   "string"
     }
+    
+    JSON_SCHEMA_TYPE_MAP_STR = {
+        "dict":"object",
+        "list":"array",
+        "bool":"boolean",
+        "int":"number",
+        "float":"number",
+        "str":"string"
+    }
 
     parsed_args = {k:v for k, v in func.__annotations__.items() 
     if k != 'return'}
 
-    json_types = {arg: JSON_SCHEMA_TYPE_MAP[arg_type] 
-    for arg, arg_type in parsed_args.items()}
+    json_types = {
+        arg: JSON_SCHEMA_TYPE_MAP[arg_type] 
+        if arg in JSON_SCHEMA_TYPE_MAP.keys() 
+        else JSON_SCHEMA_TYPE_MAP_STR[arg_type]
+    for arg, arg_type in parsed_args.items()
+    }
 
     return json_types
 
