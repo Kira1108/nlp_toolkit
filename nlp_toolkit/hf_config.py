@@ -24,3 +24,5 @@ def set_proxy(port:int = 8001):
     os.environ['all_proxy'] = f"http://127.0.0.1:{port}"
     print("Using http proxy:", os.environ["http_proxy"])
     print("Turn on VPN with corresponding proxy.")
+    
+    
