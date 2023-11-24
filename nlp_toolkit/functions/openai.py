@@ -1,8 +1,9 @@
 from __future__ import annotations
+import inspect
 from pydantic import BaseModel
 from typing import Dict, Optional
 import json
-import inspect
+
 
 """
 openai function calling API
@@ -34,12 +35,12 @@ def get_function_arg_type(func) -> dict:
         "str":"string"
     }
 
-    parsed_args = {k:v for k, v in func.__annotations__.items() 
-    if k != 'return'}
+    parsed_args = {name:type.annotation 
+                   for name, type  in inspect.signature(func).parameters.items()}
 
     json_types = {
         arg: JSON_SCHEMA_TYPE_MAP[arg_type] 
-        if arg in JSON_SCHEMA_TYPE_MAP.keys() 
+        if arg_type in JSON_SCHEMA_TYPE_MAP.keys() 
         else JSON_SCHEMA_TYPE_MAP_STR[arg_type]
     for arg, arg_type in parsed_args.items()
     }
