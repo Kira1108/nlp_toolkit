@@ -28,9 +28,10 @@ def get_completion(client, prompt:str, tools_list:list, verbose:bool = False):
             function_name = tool_call.function.name
             function_to_call = available_functions[function_name]
             function_args = json.loads(tool_call.function.arguments)
+            current_function = [tool for tool in tools_list if tool.name == function_name][0]
+            args = {arg: function_args.get(arg) for arg in current_function.funcargs.keys()}
             function_response = function_to_call(
-                location=function_args.get("location"),
-                unit=function_args.get("unit"),
+                **args
             )
             if verbose:
                 print(f"Tool Response: {function_response}")
