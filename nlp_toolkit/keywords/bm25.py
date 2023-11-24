@@ -9,9 +9,10 @@ import json
 import pickle
 import nltk
 from nltk.corpus import stopwords
-nltk.download('stopwords')
+
 
 def remove_stop_words(input_string:str):
+    nltk.download('stopwords')
     """
     This function removes stop words from the given text.
     """
