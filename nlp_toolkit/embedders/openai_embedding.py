@@ -4,7 +4,6 @@ from typing import List
 from .chroma_adapter import make_chroma
 
 
-
 class OpenAIEmbedding:
     def __init__(self, model:str = 'text-embedding-ada-002'):
         import openai
