@@ -4,7 +4,7 @@ def make_chroma(embedder:BaseEmbedder):
     from chromadb import Documents, EmbeddingFunction, Embeddings
 
     class ChromaEmbeddingFunction(EmbeddingFunction):
-        def __call__(self, texts: Documents) -> Embeddings:
-            return embedder(texts)
+        def __call__(self, input: Documents) -> Embeddings:
+            return embedder(input)
         
     return ChromaEmbeddingFunction()
