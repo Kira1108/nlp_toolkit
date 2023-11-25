@@ -20,8 +20,8 @@ def get_or_create_index_local(persist_dir = './storage', documents_dir :str= "da
     else:
         storage_context = StorageContext.from_defaults(persist_dir=persist_dir)
         index = load_index_from_storage(storage_context)
-
-    return index.as_query_engine()
+        
+    return index
 
 @dataclass
 class LocalDirRag:
@@ -45,12 +45,27 @@ class LocalDirRag:
         
         if len(openai.api_key) < 5:
             raise ValueError("OpenAI API key not in correct format. Please set it as an environment variable OPENAI_API_KEY")
+        
+        self.index = get_or_create_index_local(persist_dir = self.persist_dir, 
+                                          documents_dir = self.documents_dir)
     
     def ask(self, query:str):
-        index = get_or_create_index_local(persist_dir = self.persist_dir, 
-                                          documents_dir = self.documents_dir)
-        return index.query(query)
+        engine = self.index.as_query_engine()
+        return engine.query(query)
+    
+    @property 
+    def chatbot(self):
+        engine = self.index.as_chat_engine()
+        return RagChatBot(engine)
     
     def __call__(self, query:str):
         return self.ask(query).response
+    
+
+class RagChatBot:
+    def __init__(self, engine):
+        self.engine = engine
+        
+    def __call__(self,query):
+        return self.engine.chat(query)
     
