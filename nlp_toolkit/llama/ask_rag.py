@@ -1,4 +1,4 @@
-import os.path
+import os
 
 try:
     from llama_index import (
