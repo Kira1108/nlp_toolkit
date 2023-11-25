@@ -32,6 +32,7 @@ class LocalDirRag:
     def __post_init__(self):
         try:
             import openai
+            openai.api_key = os.environ["OPENAI_API_KEY"]
         except:
             raise ValueError("OpenAI API not installed. Please install it using pip install openai")
         
