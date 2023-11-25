@@ -4,6 +4,7 @@ import torch.nn.functional as F
 from dataclasses import dataclass
 import numpy as np
 from tqdm import tqdm
+from .chroma_adapter import make_chroma
 
 @dataclass
 class SentenceEmbedder:
@@ -20,7 +21,9 @@ class SentenceEmbedder:
         else:
             self.device = "cuda:0" if torch.cuda.is_available() else "cpu"
         self.model.to(self.device)
-
+        
+    def make_chroma(self):
+        return make_chroma(self)
 
     def _embed(self, sentences):
         encoder_input = self.tokenizer(sentences, padding = True, truncation = True, return_tensors = 'pt').to(self.device)

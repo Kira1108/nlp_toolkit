@@ -1,6 +1,8 @@
 import os
 import numpy as np
 from typing import List
+from .chroma_adapter import make_chroma
+
 
 
 class OpenAIEmbedding:
@@ -10,6 +12,9 @@ class OpenAIEmbedding:
         openai.api_key = os.environ['OPENAI_API_KEY']
         self.client = OpenAI()
         self.model = model
+        
+    def make_chroma(self):
+        return make_chroma(self)
         
     def __call__(self, texts:List[str]):
         if isinstance(texts, np.ndarray):
