@@ -7,6 +7,50 @@
 RAG 都一个套路，但是llama_index是真香。
 ![RAG Diagram](images/rag.png)
 
+有这么两个文档
+```python
+doc1 = """
+This is a piece of text about music.
+People like to listen to music, but rarely know how songs are composed and created.
+Today I am going to introudce how to compose a song.
+If you can make a sound, you can compose a song.
+A song can be simply made up of a combination of notes, when playing, give
+people some kind of feeling.
+
+Camel games is a company that make mobile strategy games.
+They produce several games, like Age of Origins, War and Order, and Inifnite Galaxy.
+""".strip()
+
+doc2 = """
+I am Wang Huan, an machine learning engineer in China.
+My primary task is to write powerpoint to teach music.
+My secondary task is to implement logistic regression models.
+""".strip()
+
+if not os.path.exists("data"):
+    os.mkdir("data")
+
+for i, doc in enumerate([doc1, doc2]):
+    with open(f"data/{i}.txt", "w") as f:
+        f.write(doc)
+```
+
+
+对这俩文档问答
+```python
+from nlp_toolkit.llama import LocalDirRag
+rag = LocalDirRag(documents_dir = "./data")
+
+rag("who is wang huan")
+>>> "Wang Huan is a machine learning engineer in China."
+
+rag("王欢的首要工作是什么")
+>>> "教授音乐的幻灯片"
+
+rag("壳木游戏开发了哪几款游戏？")
+>>> "壳木游戏开发了Age of Origins、War and Order和Infinite Galaxy几款游戏。"
+```
+
 
 ### 0. Work with OpenAI
 *1. 一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*    
