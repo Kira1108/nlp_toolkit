@@ -30,7 +30,15 @@ class LocalDirRag:
     persist_dir:str = './storage'
     
     def __post_init__(self):
-        import openai
+        try:
+            import openai
+        except:
+            raise ValueError("OpenAI API not installed. Please install it using pip install openai")
+        
+        try:
+            import llama_index
+        except:
+            raise ValueError("llama_index not installed. Please install it using pip install llama_index")
         
         if openai.api_key is None:
             raise ValueError("OpenAI API key not found. Please set it as an environment variable OPENAI_API_KEY")
