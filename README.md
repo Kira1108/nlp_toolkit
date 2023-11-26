@@ -190,7 +190,7 @@ DEFAULT_REFINE_PROMPT_TMPL = (
 - 用户的query向量数据库后查询返回了N个结果，Synthezer首先尝试用node1的内容回答用户，产生第一步的回答。    
 - 随后使用用户query， node2内容，以及nodel1步骤产生的回答，优化出nodel2的回答，以此类推，直到最后一个node的回答。
 - 当前node的内容如果无用，则返回上一步的answer.
-![refine_synthesizer](images/refine.png)
+![refine_synthesizer](images/refine1.png)
 
 
 ### 0. Work with OpenAI
