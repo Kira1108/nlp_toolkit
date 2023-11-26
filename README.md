@@ -119,12 +119,12 @@ DEFAULT_QUERY_PROMPT_TMPL = (
 ```
 
 
-**1. 你的编程水平再高，数学再好，想要让LLM发挥最大的作用，还是需要调试提示语的，特别是当LLM作为功能性的存在时，提示语能够大幅提升LLM输出的稳定性**
-**2. 以上说明`index.as_chat_engine().query()`, `index.as_query_engine().query()` 两个方法干了不少的事情，首先通过index构建query engine，query engine不仅有query的功能，还有llm的功能，底层的向量存储，相似方式，大模型都要个性化，可配置，所以存在`ServiceContext` 和 `StorageContext`来管理底层复杂性**
-**3. 把vector db从llama index中抽离，这就比langchian好100000被，用了向量数据库，还要对用户隐藏这个封装，langchain太差了。**
+**1. 你的编程水平再高，数学再好，想要让LLM发挥最大的作用，还是需要调试提示语的，特别是当LLM作为功能性的存在时，提示语能够大幅提升LLM输出的稳定性**           
+**2. 以上说明`index.as_chat_engine().query()`, `index.as_query_engine().query()` 两个方法干了不少的事情，首先通过index构建query engine，query engine不仅有query的功能，还有llm的功能，底层的向量存储，相似方式，大模型都要个性化，可配置，所以存在`ServiceContext` 和 `StorageContext`来管理底层复杂性**                   
+**3. 把vector db从llama index中抽离，这就比langchian好100000被，用了向量数据库，还要对用户隐藏这个封装，langchain太差了。**             
 
 ### 0. Work with OpenAI
-*1. 一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*    
+*1. 一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*         
 *2. 函数参数必须是json schema，比如dict, list, float, int, str, bool这些的其中一种*    
 *3. 输出的格式必须是string，不给string，chatgpt就不方便做下一步的处理，一切都jsondump成string再返回。*      
 ```python
