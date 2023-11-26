@@ -194,6 +194,8 @@ DEFAULT_REFINE_PROMPT_TMPL = (
 ![refine_synthesizer](images/refine1.png)
 
 
+去你妈的吧，老子打游戏去了。    
+
 ### 0. Work with OpenAI
 *1. 一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*         
 *2. 函数参数必须是json schema，比如dict, list, float, int, str, bool这些的其中一种*    
