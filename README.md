@@ -121,7 +121,77 @@ DEFAULT_QUERY_PROMPT_TMPL = (
 
 > **1. 你的编程水平再高，数学再好，想要让LLM发挥最大的作用，还是需要调试提示语的，特别是当LLM作为功能性的存在时，提示语能够大幅提升LLM输出的稳定性**<br>           
 > **2. 以上说明`index.as_chat_engine().query()`, `index.as_query_engine().query()` 两个方法干了不少的事情，首先通过index构建query engine，query engine不仅有query的功能，还有llm的功能，底层的向量存储，相似方式，大模型都要个性化，可配置，所以存在`ServiceContext` 和 `StorageContext`来管理底层复杂性**<br>                        
-> **3. 把vector db从llama index中抽离，这就比langchian好100000被，用了向量数据库，还要对用户隐藏这个封装，langchain太差了。**             
+> **3. 把vector db从llama index中抽离，这就比langchian好100000被，用了向量数据库，还要对用户隐藏这个封装，langchain太差了。**      
+
+### LLama-index的RAG实现
+
+![qa-chain](images/qa-chain.png)
+
+```python
+def _query(self, query_bundle: QueryBundle) -> RESPONSE_TYPE:
+
+        with self.callback_manager.event(
+            CBEventType.QUERY, payload={EventPayload.QUERY_STR: query_bundle.query_str}
+        ) as query_event:
+
+            # 1. 获取向量数据库的查询结果，这里为nodes，nodes就是文档对象，或者chunk后的文档对象，llama index内部的一个抽象。
+            # 2. 用户的query变成了一个query_bundle, 用户的query会在BaseQueryEngine的query方法转换成query_bundle.
+            # 3. 把这些东西都交给了 _response_synthesizer，完成这个查询。
+            # 4. query_even这是管理这个过程的，这个过程是一个事件，事件的payload是一个dict，包含了query_str。
+            nodes = self.retrieve(query_bundle)
+
+            # 这里的synthezer实际路由到 https://github.com/run-llama/llama_index/blob/main/llama_index/prompts/default_prompts.py#L109
+            # 
+            response = self._response_synthesizer.synthesize(
+                query=query_bundle,
+                nodes=nodes,
+            )
+
+            query_event.on_end(payload={EventPayload.RESPONSE: response})
+
+        return response
+```
+
+qa部分的实际提示语   
+上下文信息如下，`{context_str}`, 基于上下文信息，而不是先验知识，回答问题。 Query: `{query_str}` Answer: 
+```python
+DEFAULT_TEXT_QA_PROMPT_TMPL = (
+    "Context information is below.\n"
+    "---------------------\n"
+    "{context_str}\n"
+    "---------------------\n"
+    "Given the context information and not prior knowledge, "
+    "answer the query.\n"
+    "Query: {query_str}\n"
+    "Answer: "
+)
+```
+
+除了qa提示语意外，还包含了一个refine提示语：   
+原始query如下：`{query_str}` 我们提供了一个现有的答案：`{existing_answer}` 我们有机会通过下面的一些上下文来完善现有的答案（仅在需要时）。 ·`{context_msg}` 给定新的上下文，完善原始答案以更好地回答查询。 如果上下文没有用处，请返回原始答案。 完善的答案：
+```python
+DEFAULT_REFINE_PROMPT_TMPL = (
+    "The original query is as follows: {query_str}\n"
+    "We have provided an existing answer: {existing_answer}\n"
+    "We have the opportunity to refine the existing answer "
+    "(only if needed) with some more context below.\n"
+    "------------\n"
+    "{context_msg}\n"
+    "------------\n"
+    "Given the new context, refine the original answer to better "
+    "answer the query. "
+    "If the context isn't useful, return the original answer.\n"
+    "Refined Answer: "
+)
+```
+
+### Synthezer的作用
+- Synthezer通过用户的query和vectordb返回的结果(nodes)，循环优化产生回答。    
+- 用户的query返回了N个结果，Synthezer首先尝试用node1的内容回答用户，产生第一步的回答。    
+- 随后使用用户query， node2内容，以及nodel1步骤产生的回答，优化出nodel2的回答，以此类推，直到最后一个node的回答。
+- 当前node的内容如果无用，则返回上一步的answer.
+![refine_synthesizer](images/refine.png)
+
 
 ### 0. Work with OpenAI
 *1. 一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*         
