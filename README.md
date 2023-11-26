@@ -52,6 +52,75 @@ rag("壳木游戏开发了哪几款游戏？")
 ```
 
 
+### RAG prompt analysis
+
+系统提示： 你是一个问答专家系统，全世界都信任你。
+总是使用提供的上下文信息来回答查询，而不是基于先验知识。
+你需要遵循的规则如下：
+1-永远不要直接引用给定的上下文来回答你的问题。
+2-避免使用“基于上下文”这样的陈述，或者“上下文信息”这样的陈述，或者任何类似的陈述。
+```python
+TEXT_QA_SYSTEM_PROMPT = ChatMessage(
+    content=(
+        "You are an expert Q&A system that is trusted around the world.\n"
+        "Always answer the query using the provided context information, "
+        "and not prior knowledge.\n"
+        "Some rules to follow:\n"
+        "1. Never directly reference the given context in your answer.\n"
+        "2. Avoid statements like 'Based on the context, ...' or "
+        "'The context information ...' or anything along "
+        "those lines."
+    ),
+    role=MessageRole.SYSTEM,
+)
+```
+
+用户query提示语：上下文信息如下，`{context_str}`, 基于上下文信息，而不是先验知识，回答问题。 Query: `{query_str}` Answer:
+```python
+TEXT_QA_PROMPT_TMPL_MSGS = [
+    TEXT_QA_SYSTEM_PROMPT,
+    ChatMessage(
+        content=(
+            "Context information is below.\n"
+            "---------------------\n"
+            "{context_str}\n"
+            "---------------------\n"
+            "Given the context information and not prior knowledge, "
+            "answer the query.\n"
+            "Query: {query_str}\n"
+            "Answer: "
+        ),
+        role=MessageRole.USER,
+    ),
+]
+```
+> 这里可以看到`context_str`是一个`list`，每一个元素是通过查询向量数据库检索出来的，向量数据库需要用到用户的`query_str`, 回答用户问题，需要用到用户的`query_str`和检索得到的`context_str`，这就构成了一个向量数据库查询的基础。      
+
+其他有意思的提示语：
+
+选择题用户提示：以下是一些选择，它们以编号列表（1到{num_chunks}）的形式提供，
+其中列表中的每个项目对应于摘要。
+{context_list}
+仅使用上面的选择，而不是先验知识，返回与问题“{query_str}”最相关的选择。
+以以下格式提供选择：“ANSWER：<number>”，并解释为什么选择此摘要与问题相关。
+```python
+DEFAULT_QUERY_PROMPT_TMPL = (
+    "Some choices are given below. It is provided in a numbered list "
+    "(1 to {num_chunks}), "
+    "where each item in the list corresponds to a summary.\n"
+    "---------------------\n"
+    "{context_list}"
+    "\n---------------------\n"
+    "Using only the choices above and not prior knowledge, return "
+    "the choice that is most relevant to the question: '{query_str}'\n"
+    "Provide choice in the following format: 'ANSWER: <number>' and explain why "
+    "this summary was selected in relation to the question.\n"
+)
+```
+
+
+**你的编程水平再高，数学再好，想要让LLM发挥最大的作用，还是需要调试提示语的，特别是当LLM作为功能性的存在时，提示语能够大幅提升LLM输出的稳定性**
+
 ### 0. Work with OpenAI
 *1. 一定要写type hint, 还有函数注释，这些都是要传给openai的，不好好写，就等着报错吧。*    
 *2. 函数参数必须是json schema，比如dict, list, float, int, str, bool这些的其中一种*    
