@@ -52,6 +52,9 @@ class FuncArg(BaseModel):
     description:Optional[str]
     enum:Optional[list]
     
+    class Config:
+        extra = "allow"
+    
 class Parameters(BaseModel):
     type:str
     required:Optional[list]
