@@ -3,9 +3,8 @@ from .base import get_function_arg_type
 from .base import Parameters
 from .base import FuncArg
 from .base import Function
-from .base import ToolSpec
 
-class OpenAITool(FunctionWrapper):
+class LlamaFunction(FunctionWrapper):
     
     def __init__(self, func, **kwargs:FuncArg):
         super().__init__(func, **kwargs)
@@ -30,12 +29,9 @@ class OpenAITool(FunctionWrapper):
         
         if len(self.required) > 0:
             parameters.required = self.required
-        
-        return ToolSpec(
-            type="function",
-            function=Function(
+
+        return Function(
                 name=self.function_name,
                 description=self.function_description,
                 parameters=parameters
-            )
-        ).dict(exclude_unset=True)
+            ).dict(exclude_unset=True)
