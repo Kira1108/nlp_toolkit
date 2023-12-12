@@ -7,19 +7,24 @@ import os
 from pathlib import Path
 import json
 import pickle
-import nltk
-from nltk.corpus import stopwords
+import logging
 
-
-def remove_stop_words(input_string:str):
-    nltk.download('stopwords')
-    """
-    This function removes stop words from the given text.
-    """
-    stop_words = set(stopwords.words('english'))
+def remove_stop_words(input_string:str):  
     words = input_string.split()
-    filtered_words = [word for word in words if word.casefold() not in stop_words]
-    return ' '.join(filtered_words)
+    
+    try:
+        import nltk
+        from nltk.corpus import stopwords
+        nltk.download('stopwords')
+        """
+        This function removes stop words from the given text.
+        """
+        stop_words = set(stopwords.words('english'))
+        filtered_words = [word for word in words if word.casefold() not in stop_words]
+        return ' '.join(filtered_words)
+    except:
+        logging.warning("nltk not installed, no stop words removed")
+        
 
 def remove_punctuation_and_numbers(input_string:str):
     translator = str.maketrans('', '', string.punctuation + string.digits)

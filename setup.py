@@ -1,9 +1,9 @@
 from setuptools import setup
 from setuptools import find_packages
 
-requires = ["transformers","datasets","accelerate","evaluate",'googletrans',
- "tiktoken","langchain","chromadb","torch",
- "tensorflow","sentencepiece","nltk","openai==1.3.3","llama-index"]
+requires = ["transformers","datasets","accelerate","evaluate",
+ "tiktoken","langchain","chromadb","torch"
+ ,"sentencepiece","nltk","openai==1.3.3","llama-index"]
 
 setup(name='nlp_toolkit',
       version='0.0.1',
