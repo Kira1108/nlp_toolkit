@@ -3,7 +3,7 @@ from setuptools import find_packages
 
 requires = ["transformers","datasets","accelerate","evaluate",
  "tiktoken","langchain","chromadb","torch"
- ,"sentencepiece","nltk","openai==1.3.3","llama-index"]
+ ,"sentencepiece","nltk","openai==1.3.3","llama-index","tenacity"]
 
 setup(name='nlp_toolkit',
       version='0.0.1',
