@@ -8,6 +8,7 @@
 以pydantic的方式定义openai将如何输出结果 （内部调用openai function）
 ```python
 from openai import OpenAI
+from nlp_toolkit.apps import StructuredExtraction, PydanticTool
 
 client = OpenAI()
 
