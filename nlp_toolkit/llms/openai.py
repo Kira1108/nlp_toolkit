@@ -69,7 +69,8 @@ class OpenAIRequest(BaseModel):
         response = self.client.chat.completions.create(
             messages = self.messages,
             **self.call_args)    
-        return OpenAISingleResponse.from_openai_response(response)
+        return response
+        # return OpenAISingleResponse.from_openai_response(response)
 
     def __call__(self, prompt:str) -> OpenAISingleResponse:
         return self.call_llm(prompt)
