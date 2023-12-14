@@ -3,6 +3,32 @@
 *NLP死路一条，不要当NLP工程师*
 
 
+### Structured Information Extraction
+
+以pydantic的方式定义openai将如何输出结果 （内部调用openai function）
+```python
+from openai import OpenAI
+
+client = OpenAI()
+
+# openai将如何返回给你数据，用pydantic定义
+class Person(BaseModel):
+    """Person has a name and an age"""
+    name: str = Field(..., description = "name of the person")
+    age: int = Field(..., description = 'age of the person')
+    job: str = Field(..., enum = ['teacher','student','lawer'])
+
+# create a model
+model = StructuredExtraction(client = client, response_model = Person)
+
+model("Wang Huan is 38 yeras old, an University teacher in China.")
+>>> Person(name='Wang Huan', age=38, job='teacher')
+
+model("ZhangSan is 22 yeras old, he often goes to the court")
+>>> Person(name='ZhangSan', age=22, job='lawer')
+```
+
+
 ### RAG with llama
 RAG 都一个套路，但是llama_index是真香。
 ![RAG Diagram](images/rag.png)
