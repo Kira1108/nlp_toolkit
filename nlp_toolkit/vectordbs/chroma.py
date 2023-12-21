@@ -243,6 +243,10 @@ class ChromaCrud:
         query_results = self.query(doc.document, n_results = n_results, where = where_query)
         return doc, query_results
     
+    def recommend_by_doc(self, doc:Document, n_results:int = 10, where_query:dict = None) -> Tuple[Document, List[QueryResult]]:
+        query_results = self.query(doc.document, n_results = n_results, where = where_query)
+        return doc, query_results
+    
     def recommend_by_text(self, text:str, n_results:int = 10, where_query:dict = None) -> Tuple[Document, List[QueryResult]]:
         doc = Document(id = "", document = text)
         query_results = self.query(doc.document, n_results = n_results, where = where_query)
