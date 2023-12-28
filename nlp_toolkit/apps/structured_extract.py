@@ -86,7 +86,7 @@ class LlamaPydanticTool:
 
     @property
     def tool_spec(self):
-        schema = self.model.schema()
+        schema = get_pydantic_model_schema(self.model)
         required = schema.get('required', None)
         
         spec = {
