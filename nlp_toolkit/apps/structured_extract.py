@@ -1,7 +1,16 @@
 from pydantic import BaseModel
+import pydantic
 from openai import OpenAI
 import json
 from nlp_toolkit.llms.openai import OpenAIRequest
+
+def get_pydantic_model_schema(model:BaseModel):
+    if pydantic.__version__.startswith("1"):
+        return model.schema()
+    elif pydantic.__version__.startswith("2"):
+        return model.model_json_schema()
+    else:
+        raise ValueError("Pydantic version not supported, expect 1.x.x or 2.x.x, got {}".format(pydantic.__version__))
 
 class PydanticTool:
 
@@ -13,7 +22,8 @@ class PydanticTool:
 
     @property
     def tool_spec(self):
-        schema = self.model.schema()
+        
+        schema = get_pydantic_model_schema(self.model)
         required = schema.get('required', None)
         
         spec = {
