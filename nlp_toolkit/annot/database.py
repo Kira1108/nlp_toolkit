@@ -32,6 +32,16 @@ class TextDB:
     def create_database(self, tables = None, checkfirst:bool = True):
         SQLModel.metadata.create_all(self.engine,tables = tables, checkfirst=checkfirst)
         print("Database and tables created.")
+        
+    def pd_add_dataframe(self, df, text_col_name:str = 'text', key_col_name:str = 'key'):
+        df = df[[text_col_name, key_col_name]]
+        df = df.rename(columns = {text_col_name:'text', key_col_name:'key'})
+        df['is_parsed'] = False
+        df['parse_result'] = None
+        dt = datetime.datetime.now().replace(microsecond=0)
+        df['created_at'] = dt
+        df['updated_at'] = dt
+        print("successfully add all records to database")
             
     def add(self, data):
         with Session(self.engine) as session:
