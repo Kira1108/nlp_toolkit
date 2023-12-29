@@ -147,11 +147,3 @@ class TextDB:
             statement = select(Text).where(Text.key == key)
             data = session.exec(statement).one_or_none()
         return data
-
-    
-    
-    
-
-    
-    
-
