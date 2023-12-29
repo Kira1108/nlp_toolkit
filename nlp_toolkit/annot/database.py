@@ -8,7 +8,7 @@ from sqlmodel import (
     select , 
     func)
 from dataclasses import dataclass
-
+from tqdm import tqdm
 import datetime
 
 class Text(SQLModel, table=True):
@@ -93,7 +93,7 @@ class TextDB:
         return data
     
     def add_dataframe(self, df, text_col_name:str = 'text', key_col_name:str = 'key'):
-        for _, row in df.iterrows():
+        for _, row in tqdm(df.iterrows(),total = len(df), ncols = 80):
             self.add(Text(text=row[text_col_name], key=row[key_col_name]))
         
         print("insert all rows from dataframe")
