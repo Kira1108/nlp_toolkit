@@ -33,7 +33,7 @@ class TextDB:
         SQLModel.metadata.create_all(self.engine,tables = tables, checkfirst=checkfirst)
         print("Database and tables created.")
         
-    def pd_add_dataframe(self, df, text_col_name:str = 'text', key_col_name:str = 'key'):
+    def pd_add_dataframe(self, df, text_col_name:str = 'text', key_col_name:str = 'key',if_exists:str = 'append'):
         df = df[[text_col_name, key_col_name]]
         df = df.rename(columns = {text_col_name:'text', key_col_name:'key'})
         df['is_parsed'] = False
@@ -41,6 +41,7 @@ class TextDB:
         dt = datetime.datetime.now().replace(microsecond=0)
         df['created_at'] = dt
         df['updated_at'] = dt
+        df.to_sql('text', self.engine, if_exists=if_exists, index=False)
         print("successfully add all records to database")
             
     def add(self, data):
