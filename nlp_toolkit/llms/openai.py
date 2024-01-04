@@ -1,6 +1,7 @@
 from tenacity import retry, wait_random_exponential, stop_after_attempt
 from pydantic import BaseModel, Field
 from typing import Optional, Any
+import pydantic
 
 class OpenAISingleResponse(BaseModel):
 
@@ -59,7 +60,7 @@ class OpenAIRequest(BaseModel):
     
     @property
     def call_args(self):
-        args = self.dict(exclude_unset = True)
+        args = self.dict(exclude_unset = True) if pydantic.__version__.startswith(1) else self.model_dump()
         return {k:v for k, v in args.items() 
             if k not in ['client','messages']}
 

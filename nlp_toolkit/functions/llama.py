@@ -3,6 +3,7 @@ from .base import get_function_arg_type
 from .base import Parameters
 from .base import FuncArg
 from .base import Function
+import pydantic
 
 class LlamaFunction(FunctionWrapper):
     
@@ -30,8 +31,17 @@ class LlamaFunction(FunctionWrapper):
         if len(self.required) > 0:
             parameters.required = self.required
 
-        return Function(
+        
+        if pydantic.__version__.startswith(1):
+            return Function(
                 name=self.function_name,
                 description=self.function_description,
                 parameters=parameters
             ).dict(exclude_unset=True)
+            
+        else:
+            return Function(
+                name=self.function_name,
+                description=self.function_description,
+                parameters=parameters
+            ).model_dump(exclude_unset=True)

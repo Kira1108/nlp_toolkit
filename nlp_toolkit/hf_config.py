@@ -1,15 +1,18 @@
 from pydantic import BaseSettings
+import pydantic
 import os
 
 class HfSettings(BaseSettings):
     HF_HOME:str = "/Users/wanghuan/Projects/huggingface/hf_cache_dir"
     HF_DATASETS_CACHE:str = '/Users/wanghuan/Projects/huggingface/hf_cache_dir/datasets'
     TRANSFORMERS_CACHE:str = "/Users/wanghuan/Projects/huggingface/hf_cache_dir/models"
- 
+    
+
 settings = HfSettings()
 
 def set_huggingface_dir():
-    for k,v in settings.dict().items():
+    settings_dict = settings.dict() if pydantic.__version__.startswith(1) else settings.model_dump()
+    for k,v in settings_dict.items():
         os.environ[k] = v
         
     print("huggingface home: {}".format(settings.HF_HOME))
